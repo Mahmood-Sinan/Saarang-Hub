@@ -4,15 +4,18 @@ import { Link, useNavigate } from 'react-router-dom';
 
 function Navbar({ user, setUser }) {
   const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+  setUser(localStorage.getItem('username'));
   function handleLogout() {
-    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
     setUser(null);
     navigate('/');
   }
 
   let navContent;
   console.log(`${user} is logged in now`);
-  if (user) {
+  if (token) {
     navContent = (
       <>
         <Link to="/my-registrations">

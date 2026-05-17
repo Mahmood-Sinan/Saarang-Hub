@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import api from '../utils/api';
 
-const Login = ({user, setUser}) => {
+const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -18,8 +18,8 @@ const Login = ({user, setUser}) => {
     try{
       const response = await api.post('/login', {username: username, password: password});
       if(response.data.message=='User Found'){
-        localStorage.setItem('user', response.data.username);
-        setUser(response.data.username);
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('username', username);
         navigate('/');
       }
       else{

@@ -28,10 +28,10 @@ function App() {
       <main className='main-content'>
         <Routes>
           <Route path="/" element={<Home/>}></Route>
-          <Route element={<Login user={user} setUser={setUser} />} path="/login"></Route>
+          <Route element={<Login/>} path="/login"></Route>
           <Route element={<EventDetail/>} path="/events/:id"></Route>
-          <Route element={<Register user={user} setUser={setUser} />} path="/register"></Route>
-          <Route element={<MyRegistrations user={user} setUser={setUser} />} path="/my-registrations"></Route>
+          <Route element={<Register/>} path="/register"></Route>
+          <Route element={<MyRegistrations/>} path="/my-registrations"></Route>
         </Routes>
       </main>
     </BrowserRouter>

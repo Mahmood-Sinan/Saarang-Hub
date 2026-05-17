@@ -29,6 +29,27 @@ app.use(cors());
 app.use(express.json());
 
 connectDB();
+
+function authMiddleware(req, res, next){
+    const authHeader = req.headers.authorization;
+    console.log(`AuthHeader is ${authHeader}`);
+    if(!authHeader){
+        return res.status(401).json({message: "No token provided"});
+    }
+
+    const token = authHeader.split(' ')[1]; // Taken token from `Bearer ${Token}`
+    console.log(token)
+    try{
+        const decoded = jwt.verify(token, JWT_SECRET_KEY);
+        console.log(`decoded is ${decoded}`);
+        req.user = decoded;
+        next();
+    }
+    catch(error){
+        console.log('invalid token')
+        return res.status(401).json({message: "Invalid token"});
+    }
+}
 // GET route for /api/events call
 app.get('/api/events', async (req, res) => {
     console.log(`Got request for /api/events`)
@@ -67,7 +88,8 @@ app.post('/api/signup', async (req, res) => {
         })
         await newUser.save();
 
-        res.json({username: req.body.username, message: 'User Saved'})
+        const token = jwt.sign({username: req.body.username}, JWT_SECRET_KEY);
+        res.json({token: token,message: 'User Saved'})
     }
     catch(error){
         console.log(error);
@@ -85,7 +107,8 @@ app.post('/api/login', async (req, res) => {
 
         if(existingUser){
             if(existingUser.password === req.body.password){
-                res.json({username: req.body.username, message: 'User Found'})
+                const token = jwt.sign({username: existingUser.username}, JWT_SECRET_KEY);
+                res.json({token: token,message: 'User Found'})
             }
             else{
                 res.json({username: req.body.username, message: 'Incorrect Username or Password'})   
@@ -103,12 +126,12 @@ app.post('/api/login', async (req, res) => {
         });
     }
 });
-app.post('/api/events/:id/register', async (req, res) => {
+app.post('/api/events/:id/register', authMiddleware, async (req, res) => {
     console.log(`Got request for register for event: ${req.params.id}`)
     console.log(req.body);
     try{
         const eventID = req.params.id;
-        const user = await User.findOne({username: req.body.username});
+        const user = await User.findOne({username: req.user.username});
 
         if(!user){
             res.json({message: 'User not Found'});
@@ -136,12 +159,12 @@ app.post('/api/events/:id/register', async (req, res) => {
         });
     }
 });
-app.post('/api/events/:id/unregister', async (req, res) => {
+app.post('/api/events/:id/unregister', authMiddleware, async (req, res) => {
     console.log(`Got request for unregister for event: ${req.params.id}`)
     console.log(req.body);
     try{
         const eventID = req.params.id;
-        const user = await User.findOne({username: req.body.username});
+        const user = await User.findOne({username: req.user.username});
 
         if(!user){
             res.json({message: 'User not Found'});
@@ -160,10 +183,10 @@ app.post('/api/events/:id/unregister', async (req, res) => {
         });
     }
 });
-app.get('/api/my-registrations/:username', async (req, res) => {
-    console.log(`Got request for registered events for ${req.params.username}`)
+app.get('/api/my-registrations/', authMiddleware, async (req, res) => {
+    console.log(`Got request for registered events for ${req.user.username}`)
     try{
-        const user = await User.findOne({username: req.params.username});
+        const user = await User.findOne({username: req.user.username});
 
         console.log(user.registeredEvents);
         if(!user){

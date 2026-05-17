@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import api from '../utils/api';
 
-const Register = ({user, setUser}) => {
+const Register = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -14,9 +14,9 @@ const Register = ({user, setUser}) => {
     event.preventDefault();
     try{
       const response = await api.post('/signup', {username: username, email: email, password: password});
-      localStorage.setItem('user', response.data.username);
-      console.log(`signed up for ${response.data.username} and saved to ${localStorage.getItem('user')}`);
-      setUser(response.data.username);
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('username', username);
+      console.log(`signed up for ${response.data.token} and saved token to ${localStorage.getItem('token')}`);
       console.log(response.data.message);
       navigate('/');
     }

@@ -11,7 +11,7 @@ const EventDetail = () => {
   console.log(loading)
   const navigate = useNavigate();
   const [isRegistered, setIsRegistered] = useState(false);
-  const user = localStorage.getItem('user');
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -19,11 +19,10 @@ const EventDetail = () => {
         const eventAPIresult = await api.get(`/events/${id}`)
         setEvent(eventAPIresult.data);
         console.log(eventAPIresult);
-        console.log(`logged user ${user}`);
 
-        if(user){
+        if(token){
           console.log('sdzoch')
-          const res = await api.get(`/my-registrations/${user}`);
+          const res = await api.get(`/my-registrations/`,{headers: {authorization: `Bearer ${token}`}});
           console.log(res);
           let registered = false;
           for(const regEvent of res.data.regEvents){
@@ -47,13 +46,13 @@ const EventDetail = () => {
   }, [id]);
 
   const handleRegister = async () => {
-    console.log(`current user id is ${user} and requested for registration for ${id}`)
-    if(!user){
+    console.log(`current user id is ${token} and requested for registration for ${id}`)
+    if(!token){
       navigate('/login');
       return;
     }
     try{
-      const res = await api.post(`/events/${id}/register`, {username: user});
+      const res = await api.post(`/events/${id}/register`, {}, {headers: {authorization: `Bearer ${token}`}});
       setIsRegistered(true);
       console.log(res);
     }
@@ -62,13 +61,13 @@ const EventDetail = () => {
     }
   }
   const handleUnregister = async () => {
-    console.log(`current user id is ${user} and requested for unregistration for ${id}`)
-    if(!user){
+    console.log(`current user id is ${token} and requested for unregistration for ${id}`)
+    if(!token){
       navigate('/login');
       return;
     }
     try{
-      const res = await api.post(`/events/${id}/unregister`, {username: user});
+      const res = await api.post(`/events/${id}/unregister`, {}, {headers: {authorization: `Bearer ${token}`}});
       setIsRegistered(false);
       console.log(res);
     }

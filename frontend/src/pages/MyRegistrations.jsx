@@ -6,13 +6,13 @@ import { useParams } from 'react-router-dom';
 const MyRegistrations = () => {
 
   const [regEvents, setRegEvents] = useState([]);
-  let user = localStorage.getItem('user');
+  const token = localStorage.getItem('token');
   
-  console.log(`user is ${user}`)
+  console.log(`user is ${token}`)
   useEffect(()=>{
     const fetchRegistrations = async () => {
       try{
-        const res = await api.get(`/my-registrations/${user}`)
+        const res = await api.get(`/my-registrations/`, {headers: {authorization: `Bearer ${token}`}})
         console.log(`response for registered events:`);
         console.log(res.data.regEvents);
         setRegEvents(res.data.regEvents);
