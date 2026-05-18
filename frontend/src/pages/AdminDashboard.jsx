@@ -74,6 +74,7 @@ const AdminDashboard = ({username, setUsername}) => {
       <div className="container" style={{ maxWidth: '400px', marginTop: '10vh' }}>
         <div className="card" style={{ padding: '2.5rem' }}>
           <h2 className="gradient-text text-center mb-6" style={{ fontSize: '2rem' }}>Admin Access</h2>
+            {error && <div className="error-message">{error}</div>}
           <form onSubmit={handleLogin}>
             <div className="form-group">
               <label className="form-label">Admin Username</label>
@@ -137,8 +138,6 @@ const AdminDashboard = ({username, setUsername}) => {
           Logout Admin
         </button>
       </div>
-
-      {error && <div className="error-message">{error}</div>}
 
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
