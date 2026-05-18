@@ -20,6 +20,7 @@ const Login = ({username, setUsername}) => {
       if(response.data.message=='User Found'){
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('username', usernamefield);
+        localStorage.removeItem('adminToken');
         setUsername(usernamefield);
         navigate('/');
       }

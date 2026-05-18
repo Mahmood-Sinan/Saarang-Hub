@@ -16,6 +16,7 @@ const Register = ({username, setUsername}) => {
       const response = await api.post('/signup', {username: usernamefield, email: emailfield, password: passwordfield});
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('username', usernamefield);
+      localStorage.removeItem('adminToken');
       setUsername(usernamefield);
       console.log(`signed up for ${response.data.token} and saved token to ${localStorage.getItem('token')}`);
       console.log(response.data.message);
