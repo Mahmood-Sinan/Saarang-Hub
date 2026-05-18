@@ -21,6 +21,7 @@ body {
   color: var(--text);
   min-height: 100vh;
   font-family: 'Patrick Hand', cursive;
+  font-size: 1.05rem;
   background-image:
     repeating-linear-gradient(
       to bottom,
@@ -57,6 +58,18 @@ h3 {
   font-weight: 700;
   letter-spacing: -0.03em;
   position: relative;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+h2 {
+  font-size: 2.3rem;
+}
+
+h3 {
+  font-size: 1.7rem;
 }
 
 /* hand-drawn underline */
@@ -111,7 +124,7 @@ h3::after {
 
 .nav-brand {
   font-family: 'Inter', sans-serif;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: 700;
   color: var(--red);
   transform: rotate(-2deg);
@@ -128,7 +141,7 @@ h3::after {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: var(--black);
   font-family: 'Patrick Hand', cursive;
   position: relative;
@@ -147,7 +160,7 @@ h3::after {
   padding: 0.8rem 1.4rem;
   border: 3px solid var(--black);
   border-radius: 18px;
-  font-size: 1rem;
+  font-size: 1.08rem;
   font-family: 'Patrick Hand', cursive;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -226,7 +239,7 @@ h3::after {
 .form-label {
   display: block;
   margin-bottom: 0.4rem;
-  font-size: 1rem;
+  font-size: 1.08rem;
   color: var(--muted);
 }
 
@@ -237,7 +250,7 @@ h3::after {
   border-radius: 14px;
   background: #fffdf8;
   color: var(--text);
-  font-size: 1rem;
+  font-size: 1.08rem;
   font-family: 'Patrick Hand', cursive;
   outline: none;
   transition: all 0.15s ease;
@@ -312,20 +325,20 @@ h3::after {
   border: 2px solid var(--black);
   padding: 0.2rem 0.7rem;
   border-radius: 999px;
-  font-size: 0.9rem;
+  font-size: 1rem;
   margin-bottom: 0.8rem;
   transform: rotate(-2deg);
 }
 
 .event-title {
-  font-size: 1.4rem;
+  font-size: 1.55rem;
   margin-bottom: 0.7rem;
 }
 
 .event-desc {
   color: var(--muted);
-  font-size: 1rem;
-  line-height: 1.5;
+  font-size: 1.08rem;
+  line-height: 1.6;
   margin-bottom: 1rem;
 
   display: -webkit-box;
@@ -365,4 +378,49 @@ h3::after {
   background: var(--red);
   border: 2px solid var(--black);
   border-radius: 999px;
+}
+
+.brand-logo {
+  font-size: 2rem;
+  font-family: 'Inter', sans-serif;
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-decoration: none;
+
+  color: var(--paper);
+
+  background: var(--red);
+  border: 3px solid var(--black);
+  border-radius: 14px;
+
+  padding: 0.2rem 0.9rem;
+
+  display: inline-block;
+  position: relative;
+
+  transform: rotate(-2deg);
+
+  box-shadow: 4px 4px 0 var(--shadow);
+
+  transition: all 0.15s ease;
+}
+
+/* little doodle corner */
+.brand-logo::before {
+  content: "✦";
+  position: absolute;
+
+  top: -10px;
+  right: -10px;
+
+  font-size: 1rem;
+  color: var(--black);
+
+  transform: rotate(12deg);
+}
+
+.brand-logo:hover {
+  transform: rotate(1deg) translateY(-2px);
+  box-shadow: 6px 6px 0 var(--shadow);
 }

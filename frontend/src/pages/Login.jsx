@@ -3,9 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import api from '../utils/api';
 
-const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+const Login = ({username, setUsername}) => {
+  const [usernamefield, setUsernamefield] = useState('');
+  const [passwordfield, setPasswordfield] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -16,10 +16,11 @@ const Login = () => {
     setLoading(true);
     setError('');
     try{
-      const response = await api.post('/login', {username: username, password: password});
+      const response = await api.post('/login', {username: usernamefield, password: passwordfield});
       if(response.data.message=='User Found'){
         localStorage.setItem('token', response.data.token);
-        localStorage.setItem('username', username);
+        localStorage.setItem('username', usernamefield);
+        setUsername(usernamefield);
         navigate('/');
       }
       else{
@@ -44,8 +45,8 @@ const Login = () => {
             <input
               type="text"
               className="form-control"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={usernamefield}
+              onChange={(e) => setUsernamefield(e.target.value)}
               required
             />
           </div>
@@ -54,8 +55,8 @@ const Login = () => {
             <input
               type="password"
               className="form-control"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={passwordfield}
+              onChange={(e) => setPasswordfield(e.target.value)}
               required
             />
           </div>

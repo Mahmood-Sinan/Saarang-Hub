@@ -2,15 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../utils/api';
 
-const AdminDashboard = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+const AdminDashboard = ({username, setUsername}) => {
+  const [usernamefield, setUsernamefield] = useState('');
+  const [passwordfield, setPasswordfield] = useState('');
   const [error, setError] = useState('');
   const [adminToken, setAdminToken] = useState(localStorage.getItem('adminToken'));
   const [loading, setLoading] = useState(true);
   const [events, setEvents] = useState([]);
 
+  localStorage.removeItem('token');
+  localStorage.removeItem('username');
   useEffect(() => {
+    setUsername('');
     if (!adminToken) return;
 
     const fetchEvents = async () => {
@@ -33,12 +36,12 @@ const AdminDashboard = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post(`/admin/login`, { username: username, password: password });
+      const response = await api.post(`/admin/login`, { username: usernamefield, password: passwordfield });
       console.log(response);
       if (response.data.message == 'Admin Auth Successful') {
         localStorage.setItem('adminToken', response.data.token);
         setAdminToken(response.data.token);
-        localStorage.setItem('adminUsername', username);
+        localStorage.setItem('adminUsername', usernamefield);
       }
       else {
         console.log(response.data.message);
@@ -77,8 +80,8 @@ const AdminDashboard = () => {
               <input
                 type="text"
                 className="form-control"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={usernamefield}
+                onChange={(e) => setUsernamefield(e.target.value)}
                 required
               />
             </div>
@@ -87,8 +90,8 @@ const AdminDashboard = () => {
               <input
                 type="password"
                 className="form-control"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={passwordfield}
+                onChange={(e) => setPasswordfield(e.target.value)}
                 required
               />
             </div>

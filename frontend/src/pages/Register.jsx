@@ -3,19 +3,20 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import api from '../utils/api';
 
-const Register = () => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const Register = ({username, setUsername}) => {
+  const [usernamefield, setUsernamefield] = useState('');
+  const [emailfield, setEmailfield] = useState('');
+  const [passwordfield, setPasswordfield] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async(event) => {
 
     event.preventDefault();
     try{
-      const response = await api.post('/signup', {username: username, email: email, password: password});
+      const response = await api.post('/signup', {username: usernamefield, email: emailfield, password: passwordfield});
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem('username', username);
+      localStorage.setItem('username', usernamefield);
+      setUsername(usernamefield);
       console.log(`signed up for ${response.data.token} and saved token to ${localStorage.getItem('token')}`);
       console.log(response.data.message);
       navigate('/');
@@ -34,8 +35,8 @@ const Register = () => {
             <input
               type="text"
               className="form-control"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={usernamefield}
+              onChange={(e) => setUsernamefield(e.target.value)}
               required
             />
           </div>
@@ -44,8 +45,8 @@ const Register = () => {
             <input
               type="email"
               className="form-control"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={emailfield}
+              onChange={(e) => setEmailfield(e.target.value)}
               required
             />
           </div>
@@ -54,8 +55,8 @@ const Register = () => {
             <input
               type="password"
               className="form-control"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={passwordfield}
+              onChange={(e) => setPasswordfield(e.target.value)}
               required
               minLength="6"
             />
