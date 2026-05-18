@@ -1,15 +1,18 @@
 const express = require('express')
 const cors = require('cors') // to allow frontend apis to reach backend ports
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
 const app = express()
-const port = 3000
-const JWT_SECRET_KEY = 'my_secret_key' || 'fall_back_key'; 
+const PORT = process.env.PORT || 3000;
+// const JWT_SECRET_KEY = 'my_secret_key' || 'fall_back_key'; 
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || 'fall_back_key'; 
 const connectDB = async () => {
     try {
         // await mongoose.connect('mongodb+srv://sinanmahmood7_db_user:Yd1mTu7RS7rnZadN@saarangcluster.jcx0ejt.mongodb.net/?appName=SaarangCluster')
-        await mongoose.connect('mongodb://sinanmahmood7_db_user:Yd1mTu7RS7rnZadN@ac-8gyqxid-shard-00-00.jcx0ejt.mongodb.net:27017,ac-8gyqxid-shard-00-01.jcx0ejt.mongodb.net:27017,ac-8gyqxid-shard-00-02.jcx0ejt.mongodb.net:27017/?ssl=true&replicaSet=atlas-wzbeox-shard-0&authSource=admin&appName=SaarangCluster')
+        // await mongoose.connect('mongodb://sinanmahmood7_db_user:Yd1mTu7RS7rnZadN@ac-8gyqxid-shard-00-00.jcx0ejt.mongodb.net:27017,ac-8gyqxid-shard-00-01.jcx0ejt.mongodb.net:27017,ac-8gyqxid-shard-00-02.jcx0ejt.mongodb.net:27017/?ssl=true&replicaSet=atlas-wzbeox-shard-0&authSource=admin&appName=SaarangCluster')
+        await mongoose.connect(process.env.MONGO_URI);
         console.log('Connected to MongoDB Atlas');
     }
     catch(error) {
@@ -256,6 +259,6 @@ app.post('/api/events/new', authMiddleware, async (req, res) => {
         });
     }
 });
-app.listen(port, () => {
-    console.log(`Listening on port ${port}`)
+app.listen(PORT, () => {
+    console.log(`Listening on port ${PORT}`)
 });
