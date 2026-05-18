@@ -8,6 +8,8 @@ import EventDetail from './pages/EventDetail';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import MyRegistrations from './pages/MyRegistrations';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminEventForm from './pages/AdminEventForm.jsx';
 import { useState } from 'react';
 
 function App() {
@@ -16,7 +18,7 @@ function App() {
   // setUser is a function to change it
   const [user, setUser] = useState(null);
   useEffect(()=>{
-    const storedUser = localStorage.getItem('user');
+    const storedUser = localStorage.getItem('username');
     if(storedUser){
       setUser(storedUser);
     }
@@ -32,6 +34,9 @@ function App() {
           <Route element={<EventDetail/>} path="/events/:id"></Route>
           <Route element={<Register/>} path="/register"></Route>
           <Route element={<MyRegistrations/>} path="/my-registrations"></Route>
+          <Route element={<AdminDashboard/>} path="/admin"></Route>
+          <Route element={<AdminEventForm/>} path="/admin/events/:id/edit"></Route>
+          <Route element={<AdminEventForm/>} path="/admin/events/new"></Route>
         </Routes>
       </main>
     </BrowserRouter>

@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
 import EventCard from '../components/EventCard';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const MyRegistrations = () => {
 
   const [regEvents, setRegEvents] = useState([]);
   const token = localStorage.getItem('token');
-  
+  const navigate = useNavigate();
+
   console.log(`user is ${token}`)
   useEffect(()=>{
+    if(!token){
+      console.log(token);
+      navigate('/login');
+      return;
+    }
     const fetchRegistrations = async () => {
       try{
         const res = await api.get(`/my-registrations/`, {headers: {authorization: `Bearer ${token}`}})

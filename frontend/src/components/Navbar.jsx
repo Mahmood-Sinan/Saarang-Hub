@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Link, useNavigate } from 'react-router-dom';
 
 function Navbar({ user, setUser }) {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
-  setUser(localStorage.getItem('username'));
   function handleLogout() {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
