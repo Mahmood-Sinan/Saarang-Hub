@@ -177,9 +177,10 @@ app.get('/api/my-registrations/', authMiddleware, async (req, res) => {
         const regEvents = [];
         for (const eventID of user.registeredEvents){
             const event = await Event.findById(eventID);
-            regEvents.push(event);
+            if(event){
+                regEvents.push(event);
+            }
         }
-
         res.json({regEvents})
     }
     catch(error){
