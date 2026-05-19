@@ -4,14 +4,15 @@ import { useParams, useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 
 const EventDetail = () => {
-  console.log('calling eventdetail')
   const id = useParams().id;
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
-  console.log(loading)
   const navigate = useNavigate();
   const [isRegistered, setIsRegistered] = useState(false);
+  const [registering, setRegistering] = useState(false);
+  const [unregistering, setUnregistering] = useState(false);
   const username = localStorage.getItem('username');
+  const [Error, setError] = useState('');
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -20,13 +21,13 @@ const EventDetail = () => {
         setEvent(eventAPIresult.data);
         console.log(eventAPIresult);
 
-        if(username){
+        if (username) {
           console.log('sdzoch')
           const res = await api.get(`/my-registrations/`);
           console.log(res);
           let registered = false;
-          for(const regEvent of res.data.regEvents){
-            if(regEvent._id === id){
+          for (const regEvent of res.data.regEvents) {
+            if (regEvent._id === id) {
               registered = true;
               break;
             }
@@ -37,6 +38,7 @@ const EventDetail = () => {
       }
       catch (error) {
         console.error(error);
+        setError('Failed to load event details.');
       }
       finally {
         setLoading(false);
@@ -47,32 +49,42 @@ const EventDetail = () => {
 
   const handleRegister = async () => {
     console.log(`current user id is ${username} and requested for registration for ${id}`)
-    if(!username){
+    if (!username) {
       navigate('/login');
       return;
     }
-    try{
+    setRegistering(true);
+    setError('');
+    try {
       const res = await api.post(`/events/${id}/register`);
       setIsRegistered(true);
       console.log(res);
     }
-    catch(error){
-        console.error(error);
+    catch (error) {
+      console.error(error);
+      setError('Failed to register.')
+    } finally {
+      setRegistering(false);
     }
   }
   const handleUnregister = async () => {
     console.log(`current user id is ${username} and requested for unregistration for ${id}`)
-    if(!username){
+    if (!username) {
       navigate('/login');
       return;
     }
-    try{
+    setUnregistering(true);
+    setError('');
+    try {
       const res = await api.post(`/events/${id}/unregister`);
       setIsRegistered(false);
       console.log(res);
     }
-    catch(error){
-        console.error(error);
+    catch (error) {
+      console.error(error);
+      setError('Failed to unregister.');
+    } finally {
+      setUnregistering(false);
     }
   }
 
@@ -101,15 +113,18 @@ const EventDetail = () => {
           <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--text-main)' }}>About this event</h2>
           <p style={{ color: 'var(--text-muted)' }}>{event.description}</p>
         </div>
-        
+
+        {Error && <div className="error-message">{Error}</div>}
+
         <div style={{ marginTop: '2rem', borderTop: '1px solid var(--glass-border)', paddingTop: '2rem' }}>
           {!isRegistered ? (
             <button
               className="btn btn-primary"
               onClick={handleRegister}
-              style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}
+              disabled={registering}
+              style={{ padding: '1rem 2rem', fontSize: '1.1rem', cursor: registering ? 'not-allowed' : 'pointer' }}
             >
-              Register for Event
+              {registering ? 'Registering...' : 'Register for Event'}
             </button>
           ) : (
             <div>
@@ -117,8 +132,10 @@ const EventDetail = () => {
               <button
                 className="btn btn-danger"
                 onClick={handleUnregister}
+                disabled={unregistering}
+                style={{ opacity: unregistering ? 0.7 : 1, cursor: unregistering ? 'not-allowed' : 'pointer' }}
               >
-                Cancel Registration
+                {unregistering ? 'Cancelling...' : 'Cancel Registration'}
               </button>
             </div>
           )}

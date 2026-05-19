@@ -7,36 +7,44 @@ const MyRegistrations = () => {
 
   const [regEvents, setRegEvents] = useState([]);
   const username = localStorage.getItem('username');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   console.log(`user is ${username}`)
-  useEffect(()=>{
-    if(!username){
+  useEffect(() => {
+    setLoading(true);
+    if (!username) {
       console.log(username);
       navigate('/login');
       return;
     }
     const fetchRegistrations = async () => {
-      try{
+      try {
         const res = await api.get(`/my-registrations/`);
         console.log(`response for registered events:`);
         console.log(res.data.regEvents);
         setRegEvents(res.data.regEvents);
       }
-      catch(error){
+      catch (error) {
         console.error(error);
+        setError('Failed to load your registrations.')
+      } finally {
+        setLoading(false);
       }
     };
     fetchRegistrations();
-  },[]);
+  }, []);
+
+  if (loading) return <div className="text-center mt-8 container">Loading your registrations...</div>;
   const eventElements = [];
 
-  for(const event of regEvents){
-      eventElements.push(
-          <EventCard key={event._id} event={event} />
-      );
+  for (const event of regEvents) {
+    eventElements.push(
+      <EventCard key={event._id} event={event} />
+    );
   }
-    return(
+  return (
     <div className="container">
       <div style={{ marginBottom: '3rem' }}>
         <h1 className="gradient-text" style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>My Registrations</h1>
@@ -44,7 +52,10 @@ const MyRegistrations = () => {
           Events you have signed up for.
         </p>
       </div>
-      {(regEvents.length === 0 ?(
+
+      {error ? (
+        <div className="error-message">{error}</div>
+      ) : (regEvents.length === 0 ? (
         <div className="card text-center" style={{ padding: '4rem 2rem' }}>
           <p style={{ color: 'var(--text-muted)', fontSize: '1.25rem', marginBottom: '1.5rem' }}>
             You haven't registered for any events yet.
@@ -52,11 +63,11 @@ const MyRegistrations = () => {
         </div>
       ) : (
         <div className='grid grid-cols-3'>
-        {eventElements}
+          {eventElements}
         </div>
       ))}
     </div>
-    );
+  );
 };
 
 export default MyRegistrations;
