@@ -34,7 +34,7 @@ const eventSchema = new mongoose.Schema({
 const Event = mongoose.model('Events', eventSchema) // Object model for user end to create a db interface
 
 // origin means to take api calls from frontend, so origin is frontend server link, it can take multiple origins
-app.use(cors({origin: ['http://localhost:5173','https://saaranghub.vercel.app'], credentials: true}));
+app.use(cors({origin: ['http://localhost:5173','https://saarang-hub.vercel.app'], credentials: true}));
 app.use(express.json());
 
 connectDB();
