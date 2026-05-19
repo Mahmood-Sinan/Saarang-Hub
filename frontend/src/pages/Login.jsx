@@ -18,7 +18,6 @@ const Login = ({username, setUsername}) => {
     try{
       const response = await api.post('/login', {username: usernamefield, password: passwordfield});
       if(response.data.message=='User Found'){
-        localStorage.setItem('token', response.data.token);
         localStorage.setItem('username', usernamefield);
         localStorage.removeItem('adminToken');
         setUsername(usernamefield);
@@ -31,6 +30,8 @@ const Login = ({username, setUsername}) => {
     }
     catch(error){
       console.error(error);
+    } finally{
+      setLoading(false);
     }
   };
   return (
@@ -61,7 +62,17 @@ const Login = ({username, setUsername}) => {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary btn-block">Login</button>
+          <button type="submit" className="btn btn-primary btn-block">
+            {loading ? 
+                <div className="loading-inline">
+                    <span>Logging in</span>
+                    <div className="loading-dots">
+                        <span>.</span>
+                        <span>.</span>
+                        <span>.</span>
+                    </div>
+                </div> : 'Login'}
+          </button>
         </form>
 
         <p className="text-center mt-4" style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>

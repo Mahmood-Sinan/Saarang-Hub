@@ -11,7 +11,7 @@ const EventDetail = () => {
   console.log(loading)
   const navigate = useNavigate();
   const [isRegistered, setIsRegistered] = useState(false);
-  const token = localStorage.getItem('token');
+  const username = localStorage.getItem('username');
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -20,7 +20,7 @@ const EventDetail = () => {
         setEvent(eventAPIresult.data);
         console.log(eventAPIresult);
 
-        if(token){
+        if(username){
           console.log('sdzoch')
           const res = await api.get(`/my-registrations/`);
           console.log(res);
@@ -46,8 +46,8 @@ const EventDetail = () => {
   }, [id]);
 
   const handleRegister = async () => {
-    console.log(`current user id is ${token} and requested for registration for ${id}`)
-    if(!token){
+    console.log(`current user id is ${username} and requested for registration for ${id}`)
+    if(!username){
       navigate('/login');
       return;
     }
@@ -61,8 +61,8 @@ const EventDetail = () => {
     }
   }
   const handleUnregister = async () => {
-    console.log(`current user id is ${token} and requested for unregistration for ${id}`)
-    if(!token){
+    console.log(`current user id is ${username} and requested for unregistration for ${id}`)
+    if(!username){
       navigate('/login');
       return;
     }

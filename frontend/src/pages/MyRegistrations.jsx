@@ -6,13 +6,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 const MyRegistrations = () => {
 
   const [regEvents, setRegEvents] = useState([]);
-  const token = localStorage.getItem('token');
+  const username = localStorage.getItem('username');
   const navigate = useNavigate();
 
-  console.log(`user is ${token}`)
+  console.log(`user is ${username}`)
   useEffect(()=>{
-    if(!token){
-      console.log(token);
+    if(!username){
+      console.log(username);
       navigate('/login');
       return;
     }

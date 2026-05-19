@@ -90,7 +90,7 @@ app.post('/api/signup', async (req, res) => {
         await newUser.save();
 
         const token = jwt.sign({ username: req.body.username }, JWT_SECRET_KEY);
-        res.cookie('token', token, {httpOnly: true, secure: false, sameSite: 'lax'});
+        res.cookie('token', token, {httpOnly: true, secure: true, sameSite: 'none'});
         res.json({message: 'User Found' });
     }
     catch (error) {
@@ -107,7 +107,7 @@ app.post('/api/login', async (req, res) => {
         if (existingUser) {
             if (existingUser.password === req.body.password){
                 const token = jwt.sign({ username: existingUser.username }, JWT_SECRET_KEY);
-                res.cookie('token', token, {httpOnly: true, secure: false, sameSite: 'lax'});
+                res.cookie('token', token, {httpOnly: true, secure: true, sameSite: 'none'});
                 res.json({message: 'User Found' });
             }
             else {
@@ -144,8 +144,7 @@ app.post('/api/events/:id/register', authMiddleware, async (req, res) => {
         }
         user.registeredEvents.push(eventID);
         await user.save();
-
-        res.json({ username: req.body.username, message: 'Registration for the event ' + eventID + ' completed' })
+        res.json({ username: req.user.username, message: 'Registration for the event ' + eventID + ' completed' })
     }
     catch (error) {
         res.status(500).json({
@@ -166,7 +165,7 @@ app.post('/api/events/:id/unregister', authMiddleware, async (req, res) => {
         user.registeredEvents = user.registeredEvents.filter((id) => id != eventID);
         await user.save();
 
-        res.json({ username: req.body.username, message: 'Unregistration for the event ' + eventID + ' completed' })
+        res.json({ username: req.user.username, message: 'Unregistration for the event ' + eventID + ' completed' })
     }
     catch (error) {
         res.status(500).json({
