@@ -17,6 +17,7 @@ function App() {
   // user means current state value
   // setUsername is a function to change it
   const [username, setUsername] = useState('');
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   useEffect(()=>{
     const storedUser = localStorage.getItem('username');
     if(storedUser){
@@ -34,9 +35,12 @@ function App() {
           <Route element={<EventDetail/>} path="/events/:id"></Route>
           <Route element={<Register username={username} setUsername={setUsername}/>} path="/register"></Route>
           <Route element={<MyRegistrations/>} path="/my-registrations"></Route>
-          <Route element={<AdminDashboard username={username} setUsername={setUsername}/>} path="/admin"></Route>
-          <Route element={<AdminEventForm username={username} setUsername={setUsername}/>} path="/admin/events/:id/edit"></Route>
-          <Route element={<AdminEventForm username={username} setUsername={setUsername}/>} path="/admin/events/new"></Route>
+          <Route element={<AdminDashboard username={username} setUsername={setUsername}
+                          isAdminLoggedIn={isAdminLoggedIn} setIsAdminLoggedIn={setIsAdminLoggedIn}/>} path="/admin"></Route>
+          <Route element={<AdminEventForm username={username} setUsername={setUsername}
+                          isAdminLoggedIn={isAdminLoggedIn} setIsAdminLoggedIn={setIsAdminLoggedIn}/>} path="/admin/events/:id/edit"></Route>
+          <Route element={<AdminEventForm username={username} setUsername={setUsername}
+                          isAdminLoggedIn={isAdminLoggedIn} setIsAdminLoggedIn={setIsAdminLoggedIn}/>} path="/admin/events/new"></Route>
         </Routes>
       </main>
     </BrowserRouter>

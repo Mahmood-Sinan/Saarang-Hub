@@ -2,19 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../utils/api';
 
-const AdminDashboard = ({username, setUsername}) => {
+const AdminDashboard = ({username, setUsername, isAdminLoggedIn, setIsAdminLoggedIn}) => {
   const [usernamefield, setUsernamefield] = useState('');
   const [passwordfield, setPasswordfield] = useState('');
-  const [error, setError] = useState('');
-  const [adminToken, setAdminToken] = useState(localStorage.getItem('adminToken'));
+  const [LogInError, setLogInError] = useState('');
+  const [isLogginIn, setIsLogginIn] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [events, setEvents] = useState([]);
 
-  localStorage.removeItem('token');
   localStorage.removeItem('username');
   useEffect(() => {
     setUsername('');
-    if (!adminToken) return;
+    if (!isAdminLoggedIn) return;
 
     const fetchEvents = async () => {
       console.log('fetching events')
@@ -24,37 +24,39 @@ const AdminDashboard = ({username, setUsername}) => {
         setEvents(response.data);
       }
       catch (e) {
-        console.log(error);
+        console.log(e);
+        setError('Failed to fetch events.');
       }
       finally {
         setLoading(false);
       }
     }
     fetchEvents();
-  }, [adminToken]);
+  }, [isAdminLoggedIn]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLogginIn(true);
+    setLogInError('');
     try {
-      const response = await api.post(`/admin/login`, { username: usernamefield, password: passwordfield });
+      const response = await api.post(`/admin/login`, {username: usernamefield, password: passwordfield});
       console.log(response);
-      if (response.data.message == 'Admin Auth Successful') {
-        localStorage.setItem('adminToken', response.data.token);
-        setAdminToken(response.data.token);
-        localStorage.setItem('adminUsername', usernamefield);
+      if (response.data.message == 'Admin Auth Successful'){
+        setIsAdminLoggedIn(true);
       }
       else {
         console.log(response.data.message);
-        setError('Incorrect Admin Credentials');
+        setLogInError('Incorrect Admin Credentials');
       }
-    } catch (err) {
-      console.log(error);
+    } catch (e) {
+      console.log(e);
+    } finally{
+      setIsLogginIn(false);
     }
   };
   
   const handleLogout = () => {
-    localStorage.removeItem('adminToken');
-    setAdminToken(null);
+    setIsAdminLoggedIn(false);
     setEvents([]);
   };
 
@@ -69,12 +71,12 @@ const AdminDashboard = ({username, setUsername}) => {
       }
     }
   };
-  if (!adminToken) {
+  if (!isAdminLoggedIn) {
     return (
-      <div className="container" style={{ maxWidth: '400px', marginTop: '10vh' }}>
-        <div className="card" style={{ padding: '2.5rem' }}>
-          <h2 className="gradient-text text-center mb-6" style={{ fontSize: '2rem' }}>Admin Access</h2>
-            {error && <div className="error-message">{error}</div>}
+      <div className="container">
+        <div className="login_signup-container">
+          <h2 className="gradient-text text-center mb-6" style={{ fontSize: '2rem', marginBottom: '2rem'  }}>Admin Access</h2>
+            {LogInError && <div className="error-message">{LogInError}</div>}
           <form onSubmit={handleLogin}>
             <div className="form-group">
               <label className="form-label">Admin Username</label>
@@ -96,9 +98,17 @@ const AdminDashboard = ({username, setUsername}) => {
                 required
               />
             </div>
-            <button type="submit" className="btn btn-primary btn-block">
-              {'Login to Dashboard'}
-            </button>
+          <button type="submit" className="btn btn-primary btn-block">
+            {isLogginIn ? 
+                <div className="loading-inline">
+                    <span>Logging in</span>
+                    <div className="loading-dots">
+                        <span>.</span>
+                        <span>.</span>
+                        <span>.</span>
+                    </div>
+                </div> : 'Login to Dashboard'}
+          </button>
           </form>
         </div>
       </div>

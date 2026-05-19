@@ -19,7 +19,6 @@ const Login = ({username, setUsername}) => {
       const response = await api.post('/login', {username: usernamefield, password: passwordfield});
       if(response.data.message=='User Found'){
         localStorage.setItem('username', usernamefield);
-        localStorage.removeItem('adminToken');
         setUsername(usernamefield);
         navigate('/');
       }

@@ -3,32 +3,41 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import api from '../utils/api';
 
-const Register = ({username, setUsername}) => {
+const Register = ({ username, setUsername }) => {
   const [usernamefield, setUsernamefield] = useState('');
   const [emailfield, setEmailfield] = useState('');
   const [passwordfield, setPasswordfield] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async(event) => {
+  const handleSubmit = async (event) => {
 
     event.preventDefault();
-    try{
-      const response = await api.post('/signup', {username: usernamefield, email: emailfield, password: passwordfield});
+    setLoading(true);
+    setError('');
+    try {
+      const response = await api.post('/signup', { username: usernamefield, email: emailfield, password: passwordfield });
       localStorage.setItem('username', usernamefield);
-      localStorage.removeItem('adminToken');
       setUsername(usernamefield);
       console.log(`signed up for ${response.data.token} and saved token to ${localStorage.getItem('token')}`);
       console.log(response.data.message);
       navigate('/');
     }
-    catch(error){
+    catch (error) {
       console.error(error);
+      setError('Failed to register. Please try again.')
+    } finally {
+      setLoading(false);
     }
   };
   return (
     <div className="container">
       <div className='login_signup-container'>
         <h2 className="gradient-text text-center" style={{ fontSize: '2rem', marginBottom: '2rem' }}>Create Account</h2>
+
+        {error && <div className="error-message">{error}</div>}
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label className="form-label">Username</label>
@@ -61,7 +70,17 @@ const Register = ({username, setUsername}) => {
               minLength="6"
             />
           </div>
-          <button type="submit" className="btn btn-primary btn-block">Sign Up</button>
+          <button type="submit" className="btn btn-primary btn-block">
+            {loading ?
+              <div className="loading-inline">
+                <span>Creating account</span>
+                <div className="loading-dots">
+                  <span>.</span>
+                  <span>.</span>
+                  <span>.</span>
+                </div>
+              </div> : 'Sign Up'}
+          </button>
         </form>
 
         <p className="text-center mt-4" style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
