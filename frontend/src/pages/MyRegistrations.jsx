@@ -36,7 +36,16 @@ const MyRegistrations = () => {
     fetchRegistrations();
   }, []);
 
-  if (loading) return <div className="text-center mt-8 container">Loading your registrations...</div>;
+  if (loading) return(
+                <div className="loading-doodle text-center mt-8 container">
+                    <span>Loading your registrations</span>
+                    <div className="loading-dots">
+                        <span>.</span>
+                        <span>.</span>
+                        <span>.</span>
+                    </div>
+                </div>
+  );
   const eventElements = [];
 
   for (const event of regEvents) {
