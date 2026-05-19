@@ -22,7 +22,7 @@ const EventDetail = () => {
 
         if(token){
           console.log('sdzoch')
-          const res = await api.get(`/my-registrations/`,{headers: {authorization: `Bearer ${token}`}});
+          const res = await api.get(`/my-registrations/`);
           console.log(res);
           let registered = false;
           for(const regEvent of res.data.regEvents){
@@ -52,7 +52,7 @@ const EventDetail = () => {
       return;
     }
     try{
-      const res = await api.post(`/events/${id}/register`, {}, {headers: {authorization: `Bearer ${token}`}});
+      const res = await api.post(`/events/${id}/register`);
       setIsRegistered(true);
       console.log(res);
     }
@@ -67,7 +67,7 @@ const EventDetail = () => {
       return;
     }
     try{
-      const res = await api.post(`/events/${id}/unregister`, {}, {headers: {authorization: `Bearer ${token}`}});
+      const res = await api.post(`/events/${id}/unregister`);
       setIsRegistered(false);
       console.log(res);
     }

@@ -14,7 +14,6 @@ const Register = ({username, setUsername}) => {
     event.preventDefault();
     try{
       const response = await api.post('/signup', {username: usernamefield, email: emailfield, password: passwordfield});
-      localStorage.setItem('token', response.data.token);
       localStorage.setItem('username', usernamefield);
       localStorage.removeItem('adminToken');
       setUsername(usernamefield);

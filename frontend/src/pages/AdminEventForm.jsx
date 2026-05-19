@@ -43,9 +43,9 @@ const AdminEventForm = () => {
     try{
       if(edit){
         console.log('requesting for edit')
-        await api.put(`/events/${id}/edit`, formData, {headers: {authorization: `Bearer ${adminToken}`}});
+        await api.put(`/events/${id}/edit`, formData);
       }else{
-        await api.post(`events/new`, formData, {headers: {authorization: `Bearer ${adminToken}`}});
+        await api.post(`events/new`, formData);
       }
       navigate(`/admin`);
       console.log('saved new event');

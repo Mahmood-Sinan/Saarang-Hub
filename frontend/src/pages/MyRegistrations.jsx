@@ -18,7 +18,7 @@ const MyRegistrations = () => {
     }
     const fetchRegistrations = async () => {
       try{
-        const res = await api.get(`/my-registrations/`, {headers: {authorization: `Bearer ${token}`}})
+        const res = await api.get(`/my-registrations/`);
         console.log(`response for registered events:`);
         console.log(res.data.regEvents);
         setRegEvents(res.data.regEvents);

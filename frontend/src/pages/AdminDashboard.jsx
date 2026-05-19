@@ -61,7 +61,7 @@ const AdminDashboard = ({username, setUsername}) => {
   const handleDeleteEvent = async(id) => {
     if(window.confirm('Are you sure you want to delete this event ?')){
       try{
-        await api.delete(`/events/${id}`, {headers: {authorization: `Bearer ${adminToken}`}});
+        await api.delete(`/events/${id}`);
         setEvents(events.filter(event=> event._id!=id))
       }catch(e){
         alert('Failed to delete event');
