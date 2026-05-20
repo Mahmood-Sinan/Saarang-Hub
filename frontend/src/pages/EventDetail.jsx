@@ -105,6 +105,9 @@ const EventDetail = () => {
             <strong>Date:</strong> {new Date(event.date).toLocaleDateString()}
           </div>
           <div>
+            <strong>Time:</strong> {new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}
+          </div>
+          <div>
             <strong>Location:</strong> {event.location}
           </div>
         </div>
